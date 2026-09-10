@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="勤務先、シフト、給与の目安をまとめて管理。PC・スマートフォン対応。" data-i18n-content="勤務先、シフト、給与の目安をまとめて管理。PC・スマートフォン対応。">
+    <title data-i18n="SHIFT NOTE — シフト・給与管理">SHIFT NOTE — シフト・給与管理</title>
+    <link rel="icon" type="image/svg+xml" sizes="any" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%229%22%20fill%3D%22%23bcf778%22%2F%3E%3Cg%20transform%3D%22translate%284%204%29%22%20fill%3D%22none%22%20stroke%3D%22%2320300d%22%20stroke-width%3D%222.3%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m5%205%207%207-7%207m7-14%207%207-7%207%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+    <!-- Keep SHIFT-NOTE.css and SHIFT-NOTE.js beside this HTML file. -->
+    <link rel="stylesheet" href="./SHIFT-NOTE.css">
+    <script src="./SHIFT-NOTE.js" defer=""></script>
+  </head>
+  <body>
+    <a href="#main" class="skip" data-i18n="本文へ移動">本文へ移動</a>
+    <noscript><p>このアプリを使うにはJavaScriptを有効にしてください。3つのファイルを同じフォルダーに保存し、HTMLをChrome・Edgeなどのブラウザで開いてください。</p><p lang="en">Enable JavaScript to use this app. Save all three files in the same folder and open the HTML file in a browser such as Chrome or Edge.</p></noscript>
+    <div class="layout">
+      <aside class="sidebar">
+        <a href="#dashboard" class="logo" data-page="dashboard"><span class="logo-mark" data-icon="mark"></span><span class="logo-word">SHIFT NOTE</span></a>
+        <p class="eyebrow nav-label">WORKSPACE</p>
+        <nav class="navigation" aria-label="メインメニュー" data-i18n-aria-label="メインメニュー">
+          <button class="nav-button active" type="button" data-page="dashboard" aria-label="ダッシュボード" aria-current="page" data-i18n-aria-label="ダッシュボード"><span data-icon="dashboard"></span><span class="nav-long" data-i18n="ダッシュボード">ダッシュボード</span><span class="nav-short" data-i18n="ホーム">ホーム</span></button>
+          <button class="nav-button" type="button" data-page="shift" aria-label="シフト登録" data-i18n-aria-label="シフト登録"><span data-icon="register"></span><span class="nav-long" data-i18n="シフト登録">シフト登録</span><span class="nav-short" data-i18n="登録">登録</span></button>
+          <button class="nav-button" type="button" data-page="calendar" aria-label="月間カレンダー" data-i18n-aria-label="月間カレンダー"><span data-icon="calendar"></span><span data-i18n="カレンダー">カレンダー</span></button>
+          <button class="nav-button" type="button" data-page="history" aria-label="勤務履歴" data-i18n-aria-label="勤務履歴"><span data-icon="history"></span><span class="nav-long" data-i18n="勤務履歴">勤務履歴</span><span class="nav-short" data-i18n="履歴">履歴</span></button>
+          <button class="nav-button" type="button" data-page="settings" aria-label="勤務先・設定" data-i18n-aria-label="勤務先・設定"><span data-icon="settings"></span><span class="nav-long" data-i18n="勤務先・設定">勤務先・設定</span><span class="nav-short" data-i18n="設定">設定</span></button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="device-label">
+            <span data-icon="monitor"></span>
+            <span id="storageLabel">このブラウザに保存</span>
+          </div>
+          <p class="caption">YOUR TIME. YOUR PACE.</p>
+        </div>
+      </aside>
+      <main class="main" id="main" tabindex="-1">
+        <div class="mobile-brand">
+          <span data-icon="mark"></span>
+          SHIFT NOTE
+        </div>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="pageEyebrow">YOUR WORK, AT A GLANCE</p>
+            <h1 id="pageTitle">ダッシュボード</h1>
+          </div>
+          <div class="header-right">
+            <div class="header-date" id="headerDate"></div>
+            <button class="button primary" type="button" data-page="shift" id="headerAdd"><span data-icon="plus"></span><span data-i18n="シフトを登録">シフトを登録</span></button>
+          </div>
+        </header>
+        <section id="icsExportPanel" class="panel ics-export-panel" hidden="" aria-labelledby="icsExportTitle">
+          <div class="panel-head">
+            <div>
+              <h2 id="icsExportTitle" data-i18n="カレンダーファイルを保存">カレンダーファイルを保存</h2>
+              <p class="caption" id="icsExportSummary"></p>
+            </div>
+            <button class="icon-button" type="button" id="icsExportClose" aria-label="カレンダー出力を閉じる" data-i18n-aria-label="カレンダー出力を閉じる"><span data-icon="close"></span></button>
+          </div>
+          <p class="caption wrap-anywhere" id="icsFileName"></p>
+          <div class="ics-export-actions">
+            <a class="button primary" id="icsSave" download="" target="_blank" rel="noopener" data-i18n=".icsを保存">.icsを保存</a>
+            <button class="button" type="button" id="icsShare" hidden=""><span data-icon="share"></span><span data-i18n="共有">共有</span></button>
+            <a class="button" id="icsOpen" target="_blank" rel="noopener" data-i18n="別画面で開く">別画面で開く</a>
+            <button class="button" type="button" id="icsRefresh" hidden="" data-i18n="最新の内容に更新">最新の内容に更新</button>
+          </div>
+          <p class="caption" data-i18n="保存が始まらない場合は「別画面で開く」から、端末の共有メニューで保存をお試しください。アプリ内プレビューの場合はSafari・Chromeなどのブラウザで開いてください。">保存が始まらない場合は「別画面で開く」から、端末の共有メニューで保存をお試しください。アプリ内プレビューの場合はSafari・Chromeなどのブラウザで開いてください。</p>
+          <p class="caption mt-10" id="icsExportStatus" role="status"></p>
+        </section>
+        <div class="storage-banner" id="storageNotice" role="status" hidden="">
+          <p id="storageMessage"></p>
+          <div id="storageRecovery" hidden="">
+            <div class="export-actions">
+              <button class="button small" id="backupStorage" type="button" data-i18n="元データをバックアップ">元データをバックアップ</button>
+              <button class="button small" id="recoverStorage" type="button" data-i18n="正常なデータで復旧">正常なデータで復旧</button>
+            </div>
+            <div id="recoveryConfirm" hidden="">
+              <p class="caption" data-i18n="読み込める勤務先・シフト・目安金額で保存を再開します。読み込めない元データも保持します。">読み込める勤務先・シフト・目安金額で保存を再開します。読み込めない元データも保持します。</p>
+              <div class="delete-actions">
+                <button class="button small" id="confirmRecovery" type="button" data-i18n="復旧する">復旧する</button>
+                <button class="button small" id="cancelRecovery" type="button" data-i18n="キャンセル">キャンセル</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="success-banner" id="successNotice" role="status" hidden="">
+          <span data-icon="checkCircle"></span>
+          <span id="successText"></span>
+          <button type="button" class="text-button" data-page="history"><span data-i18n="履歴を確認">履歴を確認</span> <span data-icon="arrow"></span></button>
+        </div>
+        <section class="view" id="dashboard" aria-label="ダッシュボード" data-i18n-aria-label="ダッシュボード">
+          <div class="period-toolbar">
+            <label class="field">
+              <span data-i18n="給与を集計する期間">給与を集計する期間</span>
+              <select id="dashboardPeriod">
+                <option value="month" data-i18n="月ごと">月ごと</option>
+              </select>
+            </label>
+            <label class="field" id="dashboardMonthField">
+              <span data-i18n="対象月">対象月</span>
+              <input id="dashboardMonth" type="month" min="1000-01" max="9998-12">
+            </label>
+            <button class="button" type="button" data-page="settings" data-i18n="期間を設定">期間を設定</button>
+          </div>
+          <p class="caption period-range" id="periodRange"></p>
+          <div class="overview-grid">
+            <article class="panel stat-card hero">
+              <div class="stat-head">
+                <h2 data-i18n="今日の給与見込み">今日の給与見込み</h2>
+                <span class="panel-icon" data-icon="wallet"></span>
+              </div>
+              <div class="stat-value number" id="todayTotal">¥0</div>
+              <div class="stat-bottom">
+                <span><span data-i18n="給与">給与</span> <b id="todayWage">¥0</b></span>
+                <span><span data-i18n="交通費">交通費</span> <b id="todayTravel">¥0</b></span>
+                <span id="todayHours">0h</span>
+              </div>
+            </article>
+            <article class="panel stat-card">
+              <div class="stat-head">
+                <h2 data-i18n="期間の確定給与">期間の確定給与</h2>
+                <span class="panel-icon" data-icon="checkCircle"></span>
+              </div>
+              <div class="stat-value number" id="confirmed">¥0</div>
+              <div class="stat-bottom">
+                <span data-i18n="実績として確定した勤務">実績として確定した勤務</span>
+                <span id="confirmedCount">0件</span>
+              </div>
+            </article>
+            <article class="panel stat-card">
+              <div class="stat-head">
+                <h2 data-i18n="期間の給与見込み">期間の給与見込み</h2>
+                <span class="panel-icon" data-icon="trend"></span>
+              </div>
+              <div class="stat-value number" id="planned">¥0</div>
+              <div class="stat-bottom">
+                <span data-i18n="確定 ＋ 予定">確定 ＋ 予定</span>
+                <span id="plannedCount">0件</span>
+              </div>
+            </article>
+          </div>
+          <article class="panel net-card">
+            <div class="panel-head">
+              <div>
+                <h2 data-i18n="期間の支給額・概算手取り">期間の支給額・概算手取り</h2>
+                <p class="caption" data-i18n="確定と予定を含む試算">確定と予定を含む試算</p>
+              </div>
+              <button class="text-button" type="button" data-page="settings" data-i18n="控除を設定">控除を設定</button>
+            </div>
+            <div class="period-summary">
+              <div>
+                <span class="caption" data-i18n="控除前（交通費込み）">控除前（交通費込み）</span>
+                <strong class="number" id="periodGross">¥0</strong>
+              </div>
+              <div>
+                <span class="caption" data-i18n="概算控除額">概算控除額</span>
+                <strong class="number" id="periodDeductions">未設定</strong>
+              </div>
+              <div>
+                <span class="caption" data-i18n="概算手取り（交通費込み）">概算手取り（交通費込み）</span>
+                <strong class="number net" id="periodNet">未設定</strong>
+              </div>
+            </div>
+            <p class="caption deduction-detail" id="periodDeductionDetail"></p>
+            <div id="periodByWork" class="compact-list period-work-list"></div>
+          </article>
+          <div class="dashboard-columns">
+            <div class="stack">
+              <article class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h2 data-i18n="これからのシフト">これからのシフト</h2>
+                    <p class="caption" data-i18n="今日以降の勤務予定">今日以降の勤務予定</p>
+                  </div>
+                  <button class="text-button" type="button" data-page="history"><span data-i18n="履歴">履歴</span> <span data-icon="arrow"></span></button>
+                </div>
+                <div class="schedule-list" id="upcomingList"></div>
+              </article>
+              <article class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h2 data-i18n="勤務先">勤務先</h2>
+                    <p class="caption" data-i18n="設定した時給から給与を計算">設定した時給から給与を計算</p>
+                  </div>
+                  <button class="text-button" type="button" data-page="settings"><span data-i18n="編集">編集</span> <span data-icon="arrow"></span></button>
+                </div>
+                <div id="dashboardWorks"></div>
+              </article>
+            </div>
+            <div class="stack">
+              <article class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h2 data-i18n="年収の目安">年収の目安</h2>
+                    <p class="caption" id="annualLabel">今年の確定給与</p>
+                  </div>
+                  <span class="panel-icon" data-icon="target"></span>
+                </div>
+                <div id="meters"></div>
+                <div class="overview-footer">
+                  <span data-icon="info"></span>
+                  <span data-i18n="交通費を除く確定給与の合計です。目安金額は設定で変更できます。">交通費を除く確定給与の合計です。目安金額は設定で変更できます。</span>
+                </div>
+              </article>
+              <article class="panel">
+                <div class="panel-head">
+                  <h2 data-i18n="期間の勤務時間">期間の勤務時間</h2>
+                  <span class="panel-icon" data-icon="clock"></span>
+                </div>
+                <div class="row">
+                  <div>
+                    <p class="stat-value number" id="monthlyHours">0<span class="caption"> h</span></p>
+                    <p class="caption" data-i18n="予定を含む実働時間">予定を含む実働時間</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="caption" data-i18n="深夜の勤務">深夜の勤務</p>
+                    <p class="number" id="monthlyNight">0 h</p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+        <section class="view" id="shift" aria-label="シフト登録" hidden="" data-i18n-aria-label="シフト登録">
+          <div class="success-choice" id="saveChoice" role="status" hidden="">
+            <h2 id="saveChoiceTitle">シフトを保存しました</h2>
+            <p id="saveChoiceText" class="caption"></p>
+            <div class="form-buttons">
+              <button class="button primary" id="continueShift" type="button" data-i18n="続けて登録">続けて登録</button>
+              <button class="button" id="returnAfterSave" type="button">元の画面へ戻る</button>
+            </div>
+          </div>
+          <form id="shiftForm" novalidate="">
+            <div class="form-layout">
+              <div class="panel form-panel">
+                <div class="pattern-strip">
+                  <h2 data-i18n="シフトパターン">シフトパターン</h2>
+                  <p class="caption" data-i18n="勤務日はそのまま、勤務先・時給・時間・休憩を入力します。">勤務日はそのまま、勤務先・時給・時間・休憩を入力します。</p>
+                  <div class="pattern-buttons" id="patternChoices"></div>
+                  <button class="text-button" type="button" data-page="settings" data-i18n="パターンを管理">パターンを管理</button>
+                </div>
+                <div class="form-section">
+                  <div class="section-title">
+                    <span class="section-number">01</span>
+                    <h2 data-i18n="勤務先と時給">勤務先と時給</h2>
+                  </div>
+                  <div class="field-grid">
+                    <label class="field span2">
+                      <span data-i18n="登録済みの勤務先">登録済みの勤務先</span>
+                      <select id="workplace">
+                        <option value="" data-i18n="勤務先を直接入力する">勤務先を直接入力する</option>
+                      </select>
+                    </label>
+                    <label class="field span2">
+                      <span data-i18n="勤務先名">勤務先名</span>
+                      <input id="shiftWorkName" name="workName" type="text" maxlength="60" placeholder="例：カフェ〇〇 渋谷店" autocomplete="organization" aria-describedby="error-shiftWorkName" data-i18n-placeholder="例：カフェ〇〇 渋谷店">
+                      <span class="field-error" id="error-shiftWorkName" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span data-i18n="時給">時給</span>
+                      <div class="input-with-unit">
+                        <input id="shiftRate" name="rate" type="text" inputmode="decimal" placeholder="1,200" aria-describedby="error-shiftRate">
+                        <span class="input-unit" data-i18n="円">円</span>
+                      </div>
+                      <span class="field-error" id="error-shiftRate" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span><span data-i18n="深夜時給">深夜時給</span><span class="optional" data-i18n="22〜翌5時">22〜翌5時</span></span>
+                      <div class="input-with-unit">
+                        <input id="shiftNightRate" type="text" inputmode="decimal" placeholder="自動" aria-describedby="hint-shiftNightRate error-shiftNightRate" data-i18n-placeholder="自動">
+                        <span class="input-unit" data-i18n="円">円</span>
+                      </div>
+                      <span class="caption" id="hint-shiftNightRate" data-i18n="割増を含む1時間あたりの金額。空欄なら通常時給の1.25倍。">割増を含む1時間あたりの金額。空欄なら通常時給の1.25倍。</span>
+                      <span class="field-error" id="error-shiftNightRate" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span data-i18n="土日給">土日給</span>
+                      <div class="input-with-unit">
+                        <input id="shiftWeekendRate" type="text" inputmode="decimal" placeholder="通常と同じ" aria-describedby="error-shiftWeekendRate" data-i18n-placeholder="通常と同じ">
+                        <span class="input-unit" data-i18n="円">円</span>
+                      </div>
+                      <span class="caption" data-i18n="空欄なら通常時給。勤務開始日が土日のシフト全体に適用。">空欄なら通常時給。勤務開始日が土日のシフト全体に適用。</span>
+                      <span class="field-error" id="error-shiftWeekendRate" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span data-i18n="土日の深夜時給">土日の深夜時給</span>
+                      <div class="input-with-unit">
+                        <input id="shiftWeekendNightRate" type="text" inputmode="decimal" placeholder="自動" aria-describedby="error-shiftWeekendNightRate" data-i18n-placeholder="自動">
+                        <span class="input-unit" data-i18n="円">円</span>
+                      </div>
+                      <span class="caption" data-i18n="土日給を設定した場合、空欄なら土日給の1.25倍。">土日給を設定した場合、空欄なら土日給の1.25倍。</span>
+                      <span class="field-error" id="error-shiftWeekendNightRate" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span><span data-i18n="交通費">交通費</span><span class="optional" data-i18n="1勤務あたり">1勤務あたり</span></span>
+                      <div class="input-with-unit">
+                        <input id="shiftTravel" name="travel" type="text" inputmode="numeric" value="0" aria-describedby="error-shiftTravel">
+                        <span class="input-unit" data-i18n="円">円</span>
+                      </div>
+                      <span class="field-error" id="error-shiftTravel" hidden=""></span>
+                    </label>
+                  </div>
+                  <p class="inline-note" id="workHint" role="status">入力した勤務先と時給は、シフトの登録と同時に保存されます。</p>
+                </div>
+                <div class="form-section">
+                  <div class="section-title">
+                    <span class="section-number">02</span>
+                    <h2 data-i18n="勤務時間">勤務時間</h2>
+                  </div>
+                  <div class="field-grid">
+                    <label class="field span2">
+                      <span data-i18n="勤務日">勤務日</span>
+                      <input id="shiftDate" name="date" type="date" min="1000-01-01" max="9998-12-31" aria-describedby="error-shiftDate">
+                      <span class="field-error" id="error-shiftDate" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span data-i18n="出勤時間">出勤時間</span>
+                      <input id="start" name="start" type="time" step="60" value="09:00" aria-describedby="error-start">
+                      <span class="field-error" id="error-start" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span data-i18n="退勤時間">退勤時間</span>
+                      <input id="end" name="end" type="time" step="60" value="15:00" aria-describedby="error-end">
+                      <span class="field-error" id="error-end" hidden=""></span>
+                    </label>
+                    <label class="field">
+                      <span data-i18n="休憩時間">休憩時間</span>
+                      <div class="input-with-unit">
+                        <input id="breakMinutes" name="rest" type="text" inputmode="numeric" value="0" aria-describedby="error-breakMinutes">
+                        <span class="input-unit" data-i18n="分">分</span>
+                      </div>
+                      <span class="field-error" id="error-breakMinutes" hidden=""></span>
+                    </label>
+                    <label class="field" id="nightBreakField">
+                      <span data-i18n="うち深夜の休憩">うち深夜の休憩</span>
+                      <div class="input-with-unit">
+                        <input id="nightBreak" name="nightRest" type="text" inputmode="numeric" value="0" aria-describedby="error-nightBreak">
+                        <span class="input-unit" data-i18n="分">分</span>
+                      </div>
+                      <span class="field-error" id="error-nightBreak" hidden=""></span>
+                    </label>
+                  </div>
+                  <p class="caption mt-15" data-i18n="時刻は端末標準の時刻選択から分単位で入力できます。退勤が出勤より前の場合は翌日として計算します。">時刻は端末標準の時刻選択から分単位で入力できます。退勤が出勤より前の場合は翌日として計算します。</p>
+                </div>
+                <div class="form-section">
+                  <label class="check-row">
+                    <input id="isConfirmed" name="confirmed" type="checkbox">
+                    <span><span data-i18n="勤務実績として確定する">勤務実績として確定する</span><span class="caption" data-i18n="勤務が終わっている場合にチェック">勤務が終わっている場合にチェック</span></span>
+                  </label>
+                </div>
+              </div>
+              <aside class="panel estimate-panel">
+                <div class="estimate-label">
+                  <span class="eyebrow">PAY ESTIMATE</span>
+                  <span data-icon="wallet"></span>
+                </div>
+                <h2 data-i18n="このシフトの給与">このシフトの給与</h2>
+                <div class="estimate-main number" id="estimatePay">—</div>
+                <p class="caption" id="estimateWork">勤務先と時給を入力してください</p>
+                <dl class="estimate-breakdown">
+                  <div>
+                    <dt data-i18n="実働時間">実働時間</dt>
+                    <dd id="estimateHours">—</dd>
+                  </div>
+                  <div>
+                    <dt data-i18n="うち深夜">うち深夜</dt>
+                    <dd id="estimateNight">—</dd>
+                  </div>
+                </dl>
+                <div class="estimate-lines">
+                  <div class="row">
+                    <span class="muted" data-i18n="交通費">交通費</span>
+                    <span id="estimateTravel">—</span>
+                  </div>
+                  <div class="row">
+                    <strong data-i18n="控除前の支給額">控除前の支給額</strong>
+                    <strong id="estimateTotal">—</strong>
+                  </div>
+                </div>
+                <p class="overlap-warning" id="overlapWarning" role="status" hidden=""></p>
+                <div class="row">
+                  <span data-i18n="概算手取り">概算手取り</span>
+                  <strong id="estimateNet">未設定</strong>
+                </div>
+                <div class="error-banner" id="shiftError" role="alert" hidden=""></div>
+                <button class="button primary full" type="submit" form="shiftForm" id="registerShift"><span data-icon="plus"></span>このシフトを登録</button>
+                <button class="button ghost full mt-10" type="button" id="cancelShiftEdit" hidden="" data-i18n="編集をキャンセル">編集をキャンセル</button>
+                <p class="caption mt-12" id="registerNote">勤務先・時給も一緒に保存します。</p>
+                <details>
+                  <summary data-i18n="計算について">計算について</summary>
+                  <p data-i18n="通常時間の実働 × 時給 ＋ 深夜（22〜翌5時）の実働 × 深夜時給。深夜時給が空欄の場合は通常時給の1.25倍を使用します。時給は小数第2位まで設定できます。分単位で計算し、1勤務ごとに円単位で四捨五入します。設定した土日給・深夜時給を反映します。法定の残業・休日割増は別計算です。給与は控除前の概算です。休憩時間は実際の内訳を入力してください。">通常時間の実働 × 時給 ＋ 深夜（22〜翌5時）の実働 × 深夜時給。深夜時給が空欄の場合は通常時給の1.25倍を使用します。時給は小数第2位まで設定できます。分単位で計算し、1勤務ごとに円単位で四捨五入します。設定した土日給・深夜時給を反映します。法定の残業・休日割増は別計算です。給与は控除前の概算です。休憩時間は実際の内訳を入力してください。</p>
+                </details>
+              </aside>
+            </div>
+          </form>
+        </section>
+        <section class="view" id="history" aria-label="勤務履歴" hidden="" data-i18n-aria-label="勤務履歴">
+          <div class="history-toolbar">
+            <label class="field">
+              <span data-i18n="表示する月">表示する月</span>
+              <input id="historyMonth" type="month" min="1000-01" max="9998-12">
+            </label>
+            <div class="history-totals">
+              <div>
+                <span class="caption" data-i18n="給与合計">給与合計</span>
+                <strong class="number" id="historyPay">¥0</strong>
+              </div>
+              <div>
+                <span class="caption" data-i18n="シフト数">シフト数</span>
+                <strong class="number" id="historyCount">0件</strong>
+              </div>
+            </div>
+            <div>
+              <span class="caption" data-i18n="概算手取り">概算手取り</span>
+              <strong class="number" id="historyNet" data-i18n="未設定">未設定</strong>
+            </div>
+            <div class="export-pair">
+              <button class="button" type="button" id="historyIcs">この月の .ics</button>
+              <button class="button" type="button" id="historyCsv"><span data-icon="download"></span>この月のCSV</button>
+            </div>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+        <section class="view" id="calendar" aria-label="月間カレンダー" hidden="" data-i18n-aria-label="月間カレンダー">
+          <article class="panel calendar-panel">
+            <div class="calendar-toolbar">
+              <button class="button" id="calendarPrev" type="button" aria-label="前の月" data-i18n-aria-label="前の月" data-i18n="前月">前月</button>
+              <label class="field">
+                <span data-i18n="表示する月">表示する月</span>
+                <input id="calendarMonth" type="month" min="1000-01" max="9998-12">
+              </label>
+              <button class="button" id="calendarNext" type="button" aria-label="次の月" data-i18n-aria-label="次の月" data-i18n="翌月">翌月</button>
+              <button class="button" id="calendarToday" type="button" data-i18n="今月">今月</button>
+              <button class="button" id="calendarIcs" type="button" data-i18n="この月の .ics">この月の .ics</button>
+            </div>
+            <div class="calendar-legend" id="calendarLegend"></div>
+            <div class="calendar-stats" id="calendarStats"></div>
+            <div class="calendar-grid" id="calendarGrid" aria-label="月間の勤務日一覧" data-i18n-aria-label="月間の勤務日一覧"></div>
+            <p class="caption mt-12" data-i18n="日付を選ぶと勤務の詳細・編集・削除・新規登録ができます。日をまたぐ勤務は翌日のマスにも表示します。">日付を選ぶと勤務の詳細・編集・削除・新規登録ができます。日をまたぐ勤務は翌日のマスにも表示します。</p>
+            <div class="calendar-details" id="calendarDetails"></div>
+          </article>
+        </section>
+        <section class="view" id="settings" aria-label="勤務先・設定" hidden="" data-i18n-aria-label="勤務先・設定">
+          <div class="work-settings">
+            <article class="panel settings-wide language-settings" id="languageSettings">
+              <div>
+                <h2 id="languageTitle" data-i18n="Language / 言語">Language / 言語</h2>
+                <p class="caption" id="languageHint" data-i18n="表示言語を選択します。金額は日本円、カレンダー出力は日本時間です。">表示言語を選択します。金額は日本円、カレンダー出力は日本時間です。</p>
+              </div>
+              <label class="field language-field">
+                <span data-i18n="表示言語">表示言語</span>
+                <select id="languageSelect" aria-describedby="languageHint languageStatus">
+                  <option value="ja" lang="ja">日本語</option>
+                  <option value="en" lang="en">English</option>
+                </select>
+              </label>
+              <p class="caption" id="languageStatus" role="status" hidden=""></p>
+            </article>
+            <article class="panel" id="workListSettings">
+              <div class="panel-head">
+                <div>
+                  <h2 data-i18n="勤務先を管理">勤務先を管理</h2>
+                  <p class="caption" data-i18n="バイト先と時給を自由に設定">バイト先と時給を自由に設定</p>
+                </div>
+                <span class="panel-icon" data-icon="briefcase"></span>
+              </div>
+              <div id="workplaces"></div>
+              <button class="button ghost full" id="newWork" type="button"><span data-icon="plus"></span><span data-i18n="勤務先を追加">勤務先を追加</span></button>
+            </article>
+            <article class="panel" id="workEditor">
+              <div class="work-form-head">
+                <h2 id="workTitle">新しい勤務先</h2>
+                <p class="caption" data-i18n="名前と時給を入力して保存してください。">名前と時給を入力して保存してください。</p>
+              </div>
+              <form id="workForm" novalidate="">
+                <div class="field-grid">
+                  <label class="field span2">
+                    <span data-i18n="勤務先名">勤務先名</span>
+                    <input id="workName" type="text" maxlength="60" placeholder="例：カフェ〇〇 渋谷店" autocomplete="organization" aria-describedby="error-workName" data-i18n-placeholder="例：カフェ〇〇 渋谷店">
+                    <span class="field-error" id="error-workName" hidden=""></span>
+                  </label>
+                  <label class="field">
+                    <span data-i18n="時給">時給</span>
+                    <div class="input-with-unit">
+                      <input id="workRate" type="text" inputmode="decimal" placeholder="1,200" aria-describedby="error-workRate">
+                      <span class="input-unit" data-i18n="円">円</span>
+                    </div>
+                    <span class="field-error" id="error-workRate" hidden=""></span>
+                  </label>
+                  <label class="field">
+                    <span><span data-i18n="深夜時給">深夜時給</span><span class="optional" data-i18n="22〜翌5時">22〜翌5時</span></span>
+                    <div class="input-with-unit">
+                      <input id="workNightRate" type="text" inputmode="decimal" placeholder="自動" aria-describedby="hint-workNightRate error-workNightRate" data-i18n-placeholder="自動">
+                      <span class="input-unit" data-i18n="円">円</span>
+                    </div>
+                    <span class="caption" id="hint-workNightRate" data-i18n="割増を含む1時間あたりの金額。空欄なら通常時給の1.25倍。">割増を含む1時間あたりの金額。空欄なら通常時給の1.25倍。</span>
+                    <span class="field-error" id="error-workNightRate" hidden=""></span>
+                  </label>
+                  <label class="field">
+                    <span data-i18n="土日給">土日給</span>
+                    <div class="input-with-unit">
+                      <input id="workWeekendRate" type="text" inputmode="decimal" placeholder="通常と同じ" aria-describedby="error-workWeekendRate" data-i18n-placeholder="通常と同じ">
+                      <span class="input-unit" data-i18n="円">円</span>
+                    </div>
+                    <span class="caption" data-i18n="空欄なら通常時給。勤務開始日が土日のシフト全体に適用。">空欄なら通常時給。勤務開始日が土日のシフト全体に適用。</span>
+                    <span class="field-error" id="error-workWeekendRate" hidden=""></span>
+                  </label>
+                  <label class="field">
+                    <span data-i18n="土日の深夜時給">土日の深夜時給</span>
+                    <div class="input-with-unit">
+                      <input id="workWeekendNightRate" type="text" inputmode="decimal" placeholder="自動" aria-describedby="error-workWeekendNightRate" data-i18n-placeholder="自動">
+                      <span class="input-unit" data-i18n="円">円</span>
+                    </div>
+                    <span class="caption" data-i18n="土日給を設定した場合、空欄なら土日給の1.25倍。">土日給を設定した場合、空欄なら土日給の1.25倍。</span>
+                    <span class="field-error" id="error-workWeekendNightRate" hidden=""></span>
+                  </label>
+                  <label class="field">
+                    <span><span data-i18n="交通費">交通費</span><span class="optional" data-i18n="1勤務">1勤務</span></span>
+                    <div class="input-with-unit">
+                      <input id="workTravel" type="text" inputmode="numeric" value="0" aria-describedby="error-workTravel">
+                      <span class="input-unit" data-i18n="円">円</span>
+                    </div>
+                    <span class="field-error" id="error-workTravel" hidden=""></span>
+                  </label>
+                  <label class="field color-field">
+                    <span data-i18n="勤務先のカラー">勤務先のカラー</span>
+                    <input id="workColor" type="color" value="#bcf778" aria-describedby="error-workColor">
+                    <span class="caption" data-i18n="バッジ・履歴・カレンダーに反映">バッジ・履歴・カレンダーに反映</span>
+                    <span class="field-error" id="error-workColor" hidden=""></span>
+                  </label>
+                </div>
+                <div class="error-banner" id="workError" role="alert" hidden=""></div>
+                <div class="form-buttons">
+                  <button class="button" type="button" id="cancelWork" data-i18n="入力をクリア">入力をクリア</button>
+                  <button class="button primary" type="submit"><span data-icon="check"></span><span data-i18n="勤務先を保存">勤務先を保存</span></button>
+                </div>
+                <p class="caption mt-14" data-i18n="時給の変更は今後の登録に反映します。登録済みシフトの給与は変わりません。">時給の変更は今後の登録に反映します。登録済みシフトの給与は変わりません。</p>
+              </form>
+            </article>
+            <article class="panel" id="periodSettings">
+              <div class="panel-head">
+                <div>
+                  <h2 data-i18n="シフト表の期間">シフト表の期間</h2>
+                  <p class="caption" data-i18n="1か月・2週間など、集計したい期間を保存">1か月・2週間など、集計したい期間を保存</p>
+                </div>
+                <span data-icon="calendar"></span>
+              </div>
+              <div id="periodList" class="compact-list"></div>
+              <form id="periodForm" novalidate="">
+                <h3 id="periodFormTitle">期間を追加</h3>
+                <div class="field-grid mt-16">
+                  <label class="field span2">
+                    <span data-i18n="期間の名前">期間の名前</span>
+                    <input id="periodName" maxlength="60" placeholder="例：9月後半のシフト表" data-i18n-placeholder="例：9月後半のシフト表">
+                  </label>
+                  <label class="field">
+                    <span data-i18n="開始日">開始日</span>
+                    <input id="periodStart" type="date" min="1000-01-01" max="9998-12-31">
+                  </label>
+                  <label class="field">
+                    <span data-i18n="終了日（この日を含む）">終了日（この日を含む）</span>
+                    <input id="periodEnd" type="date" min="1000-01-01" max="9998-12-31">
+                  </label>
+                  <label class="field span2">
+                    <span data-i18n="集計する勤務先">集計する勤務先</span>
+                    <select id="periodWork">
+                      <option value="" data-i18n="すべての勤務先">すべての勤務先</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="form-buttons">
+                  <button class="button small" type="button" id="periodTwoWeeks" data-i18n="開始日から2週間">開始日から2週間</button>
+                  <button class="button small" type="button" id="periodMonth" data-i18n="開始日の月末まで">開始日の月末まで</button>
+                </div>
+                <p class="caption mt-12" data-i18n="勤務開始日で集計します。日をまたぐ勤務の給与は開始日にまとめます。">勤務開始日で集計します。日をまたぐ勤務の給与は開始日にまとめます。</p>
+                <p class="field-error" id="periodError" role="alert" hidden=""></p>
+                <div class="form-buttons">
+                  <button class="button" id="cancelPeriod" type="button" data-i18n="入力をクリア">入力をクリア</button>
+                  <button class="button primary" type="submit" data-i18n="期間を保存">期間を保存</button>
+                </div>
+              </form>
+            </article>
+            <article class="panel" id="patternSettings">
+              <div class="panel-head">
+                <div>
+                  <h2 data-i18n="シフトパターン">シフトパターン</h2>
+                  <p class="caption" data-i18n="勤務先ごとの早番・遅番をワンタップで入力">勤務先ごとの早番・遅番をワンタップで入力</p>
+                </div>
+                <span data-icon="clock"></span>
+              </div>
+              <div id="patternList" class="compact-list"></div>
+              <form id="patternForm" novalidate="">
+                <h3 id="patternFormTitle">パターンを追加</h3>
+                <div class="field-grid mt-16">
+                  <label class="field span2">
+                    <span data-i18n="パターン名">パターン名</span>
+                    <input id="patternName" maxlength="60" placeholder="例：早番" data-i18n-placeholder="例：早番">
+                  </label>
+                  <label class="field span2">
+                    <span data-i18n="勤務先">勤務先</span>
+                    <select id="patternWork">
+                      <option value="" data-i18n="勤務先を選択">勤務先を選択</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    <span data-i18n="出勤">出勤</span>
+                    <input id="patternStart" type="time" step="60" value="09:00">
+                  </label>
+                  <label class="field">
+                    <span data-i18n="退勤">退勤</span>
+                    <input id="patternEnd" type="time" step="60" value="17:00">
+                  </label>
+                  <label class="field">
+                    <span data-i18n="休憩（分）">休憩（分）</span>
+                    <input id="patternRest" type="number" min="0" max="1438" step="1" value="60">
+                  </label>
+                  <label class="field">
+                    <span data-i18n="うち深夜の休憩（分）">うち深夜の休憩（分）</span>
+                    <input id="patternNightRest" type="number" min="0" max="1438" step="1" value="0">
+                  </label>
+                </div>
+                <p class="caption mt-12" data-i18n="適用時に勤務先の最新時給・土日給・交通費を使い、「予定」として入力します。">適用時に勤務先の最新時給・土日給・交通費を使い、「予定」として入力します。</p>
+                <p class="field-error" id="patternError" role="alert" hidden=""></p>
+                <div class="form-buttons">
+                  <button class="button" id="cancelPattern" type="button" data-i18n="入力をクリア">入力をクリア</button>
+                  <button class="button primary" type="submit" data-i18n="パターンを保存">パターンを保存</button>
+                </div>
+              </form>
+            </article>
+            <article class="panel" id="deductionSettings">
+              <div class="panel-head">
+                <div>
+                  <h2 data-i18n="概算手取りシミュレーション">概算手取りシミュレーション</h2>
+                  <p class="caption" data-i18n="給与明細などを参考に、自分の概算控除率を設定">給与明細などを参考に、自分の概算控除率を設定</p>
+                </div>
+                <span data-icon="wallet"></span>
+              </div>
+              <form id="deductionForm" novalidate="">
+                <label class="check-row">
+                  <input type="checkbox" id="deductionEnabled">
+                  <span data-i18n="設定した控除率で手取りを表示する">設定した控除率で手取りを表示する</span>
+                </label>
+                <div class="field-grid mt-16">
+                  <label class="field">
+                    <span data-i18n="所得税などの概算率">所得税などの概算率</span>
+                    <div class="input-with-unit">
+                      <input id="deductionTax" type="text" inputmode="decimal" value="0">
+                      <span class="input-unit">%</span>
+                    </div>
+                  </label>
+                  <label class="field">
+                    <span data-i18n="社会保険料の概算率">社会保険料の概算率</span>
+                    <div class="input-with-unit">
+                      <input id="deductionSocial" type="text" inputmode="decimal" value="0">
+                      <span class="input-unit">%</span>
+                    </div>
+                  </label>
+                  <label class="field">
+                    <span data-i18n="その他の控除率">その他の控除率</span>
+                    <div class="input-with-unit">
+                      <input id="deductionOther" type="text" inputmode="decimal" value="0">
+                      <span class="input-unit">%</span>
+                    </div>
+                  </label>
+                </div>
+                <p class="field-error" id="deductionError" role="alert" hidden=""></p>
+                <button class="button full mt-20" type="submit" data-i18n="控除設定を保存">控除設定を保存</button>
+              </form>
+              <p class="caption mt-14" data-i18n="各控除額＝表示対象の給与合計（交通費除く）×設定率。項目ごとに円単位で四捨五入し、給与＋交通費から差し引きます。実際の税額・社会保険料を算定する機能ではありません。住民税等も必要なら「その他」に含めて設定してください。">各控除額＝表示対象の給与合計（交通費除く）×設定率。項目ごとに円単位で四捨五入し、給与＋交通費から差し引きます。実際の税額・社会保険料を算定する機能ではありません。住民税等も必要なら「その他」に含めて設定してください。</p>
+              <p class="caption source-links mt-10"><span data-i18n="税額は適用する年や条件で異なります。">税額は適用する年や条件で異なります。</span><a href="https://www.nta.go.jp/publication/pamph/gensen/zeigakuhyo2026/01.htm" target="_blank" rel="noopener noreferrer" data-i18n="国税庁：令和8年分 源泉徴収税額表">国税庁：令和8年分 源泉徴収税額表</a></p>
+            </article>
+            <article class="panel" id="limitSettings">
+              <div class="panel-head">
+                <div>
+                  <h2 data-i18n="年収の目安">年収の目安</h2>
+                  <p class="caption" data-i18n="表示する目安と金額を設定">表示する目安と金額を設定</p>
+                </div>
+                <span class="panel-icon" data-icon="target"></span>
+              </div>
+              <form id="limitsForm" novalidate="">
+                <div id="limits" class="limits-form"></div>
+                <p class="field-error" id="limitsError" role="alert" hidden=""></p>
+                <button type="submit" class="button full mt-20" data-i18n="目安金額を保存">目安金額を保存</button>
+              </form>
+              <p class="caption mt-15" data-i18n="今年の確定給与（交通費を除く）を集計します。初期金額は任意の目標例です。税制・社会保険の加入条件や扶養の判定には使えません。自分の管理目標に合わせて変更してください。">今年の確定給与（交通費を除く）を集計します。初期金額は任意の目標例です。税制・社会保険の加入条件や扶養の判定には使えません。自分の管理目標に合わせて変更してください。</p>
+            </article>
+            <article class="panel settings-wide" id="dataSettings">
+              <div class="panel-head">
+                <div>
+                  <h2 data-i18n="データの保存・復元">データの保存・復元</h2>
+                  <p class="caption" data-i18n="勤務履歴の出力とバックアップの取り込み">勤務履歴の出力とバックアップの取り込み</p>
+                </div>
+                <span class="panel-icon" data-icon="download"></span>
+              </div>
+              <div class="export-actions">
+                <div class="export-pair">
+                  <button type="button" class="button" id="csv"><span data-icon="file"></span>CSV</button>
+                  <button type="button" class="button" id="pdf"><span data-icon="printer"></span><span data-i18n="PDF / 印刷">PDF / 印刷</span></button>
+                </div>
+                <button class="button full" type="button" id="icsAll" data-i18n="全シフトをカレンダーへ出力（.ics）">全シフトをカレンダーへ出力（.ics）</button>
+                <div class="backup-pair" role="group" aria-label="バックアップとインポート" data-i18n-aria-label="バックアップとインポート">
+                  <button type="button" class="button" id="backupAll"><span data-icon="download"></span><span data-i18n="バックアップ">バックアップ</span></button>
+                  <button type="button" class="button" id="importOpen"><span data-icon="file"></span><span data-i18n="インポート">インポート</span></button>
+                </div>
+              </div>
+              <p class="caption" data-i18n="PDFは印刷画面の「PDFに保存」を選択してください。復元するときは「インポート」からJSONバックアップを選びます。.ics出力を選ぶと、画面上部に「.icsを保存」が表示されます。共有に対応する端末では「共有」も選べます。日本時間の予定として書き出します。Google・Appleカレンダーのファイル読み込みで一括追加できます。再出力しても自動同期はされず、取り込み先によっては重複します。">PDFは印刷画面の「PDFに保存」を選択してください。復元するときは「インポート」からJSONバックアップを選びます。.ics出力を選ぶと、画面上部に「.icsを保存」が表示されます。共有に対応する端末では「共有」も選べます。日本時間の予定として書き出します。Google・Appleカレンダーのファイル読み込みで一括追加できます。再出力しても自動同期はされず、取り込み先によっては重複します。</p>
+              <input type="file" id="backupFile" accept=".json,application/json,text/json" aria-label="インポートするJSONバックアップ" hidden="" data-i18n-aria-label="インポートするJSONバックアップ">
+              <div class="work-card mt-18" id="importReview" hidden="">
+                <h3 data-i18n="取り込むバックアップ">取り込むバックアップ</h3>
+                <p id="importFileName" class="caption wrap-anywhere"></p>
+                <p id="importFileInfo" class="caption"></p>
+                <label class="field mt-16">
+                  <span data-i18n="取り込み方法">取り込み方法</span>
+                  <select id="importMode">
+                    <option value="merge" data-i18n="現在のデータに追加する">現在のデータに追加する</option>
+                    <option value="replace" data-i18n="すべて置き換える">すべて置き換える</option>
+                  </select>
+                </label>
+                <p class="inline-note" id="importSummary" role="status"></p>
+                <div class="form-buttons">
+                  <button type="button" class="button" id="importCancel" data-i18n="キャンセル">キャンセル</button>
+                  <button type="button" class="button primary" id="importConfirm" disabled="" data-i18n="この内容を取り込む">この内容を取り込む</button>
+                </div>
+              </div>
+              <p class="field-error" id="importError" role="alert" hidden=""></p>
+            </article>
+            <p class="caption settings-wide" data-i18n="このブラウザにデータを保存します。別のPC・スマホには自動同期されません。">このブラウザにデータを保存します。別のPC・スマホには自動同期されません。</p>
+          </div>
+        </section>
+        <footer class="footer">
+          <span>SHIFT NOTE / YOUR TIME. YOUR PACE.</span>
+          <span data-i18n="給与は控除前の概算です。">給与は控除前の概算です。</span>
+        </footer>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" hidden="">
+      <span data-icon="checkCircle"></span>
+      <span class="toast-message" id="toastMessage"></span>
+      <button class="icon-button" type="button" id="closeToast" aria-label="通知を閉じる" data-i18n-aria-label="通知を閉じる"><span data-icon="close"></span></button>
+    </div>
+    <section class="print-only" id="printReport"></section>
+  
+
+</body></html>
